@@ -1,8 +1,10 @@
+import React from 'react'
+
 interface StatusBadgeProps {
   status: string
 }
 
-export default function StatusBadge({ status }: StatusBadgeProps) {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   const getBadgeStyle = (status: string) => {
     switch (status) {
       case 'OPEN':
@@ -20,3 +22,5 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     </span>
   )
 }
+
+export default StatusBadge
