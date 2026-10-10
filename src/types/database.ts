@@ -10,12 +10,13 @@ export interface TicketSparePart {
 }
 
 export interface Machine {
+  id?: number
   machine_code: string
   name: string
   line_zone: string
 }
 
-export interface MaintenanceTicket {
+export type MaintenanceTicket = {
   id: number
   error_code: string
   description: string
@@ -23,6 +24,6 @@ export interface MaintenanceTicket {
   status: string
   downtime_minutes: number
   created_at: string
-  machines: Machine | null
-  ticket_spare_parts: TicketSparePart[]
+  machines: Machine // <-- กำหนดเป็น Object เดี่ยว (ไม่ต้องมี [])
+  ticket_spare_parts?: any[]
 }

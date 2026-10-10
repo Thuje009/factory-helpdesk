@@ -5,7 +5,8 @@ interface TicketCardProps {
   ticket: MaintenanceTicket
 }
 
-export default function TicketCard({ ticket }: TicketCardProps) {
+const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
+
   return (
     <div className="border border-gray-200 p-5 rounded-xl shadow-sm bg-white">
       <div className="flex justify-between items-start mb-3">
@@ -27,7 +28,7 @@ export default function TicketCard({ ticket }: TicketCardProps) {
         </div>
       )}
 
-      {/* รายการอะไหล่ที่เบิกใช้ */}
+      รายการอะไหล่ที่เบิกใช้
       {ticket.ticket_spare_parts && ticket.ticket_spare_parts.length > 0 && (
         <div className="border-t pt-3 mt-3">
           <p className="font-semibold text-xs text-gray-700 mb-2">🔧 อะไหล่ที่เบิกใช้:</p>
@@ -48,3 +49,8 @@ export default function TicketCard({ ticket }: TicketCardProps) {
     </div>
   )
 }
+
+export default TicketCard
+
+
+
