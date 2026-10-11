@@ -6,7 +6,7 @@ export interface SparePart {
 
 export interface TicketSparePart {
   quantity_used: number
-  spare_parts: SparePart | null
+  spare_parts: SparePart | SparePart[] | null
 }
 
 export interface Machine {
@@ -24,6 +24,6 @@ export type MaintenanceTicket = {
   status: string
   downtime_minutes: number
   created_at: string
-  machines: Machine // <-- กำหนดเป็น Object เดี่ยว (ไม่ต้องมี [])
-  ticket_spare_parts?: any[]
+  machines: Machine | Machine[] | null
+  ticket_spare_parts: TicketSparePart[]
 }

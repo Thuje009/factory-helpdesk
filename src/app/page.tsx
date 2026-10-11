@@ -1,11 +1,16 @@
-import { supabase } from '@/config/lib/supabase' // หรือ '@/lib/supabase' ขึ้นอยู่กับว่าเปลี่ยนชื่อโฟลเดอร์ไหม
+import { createClient } from '@supabase/supabase-js'
+import DashboardContent from '@/components/DashboardContent'
 import { MaintenanceTicket } from '@/types/database'
-import TicketCard from '@/components/TicketCard'
 
 export const dynamic = 'force-dynamic'
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+
 export default async function FactoryDashboard() {
-  const { data: tickets, error } = await supabase
+  const { data: rawTickets } = await supabase
     .from('maintenance_tickets')
     .select(`
       id,
@@ -29,31 +34,14 @@ export default async function FactoryDashboard() {
         )
       )
     `)
-    .order('id', { ascending: true })
+    .order('id', { ascending: false })
 
-  if (error) {
-    return (
-      <div className="p-8 text-red-500 font-mono max-w-3xl mx-auto">
-        <h2 className="text-lg font-bold mb-2">⚠️ เกิดข้อผิดพลาดในการดึงข้อมูลจาก Supabase:</h2>
-        <p className="bg-red-50 p-4 border border-red-200 rounded">{error.message}</p>
-      </div>
-    )
-  }
+  const tickets = rawTickets as MaintenanceTicket[] | null
 
-  const ticketList = (tickets || []) as unknown as MaintenanceTicket[]
+  const { data: machines } = await supabase
+    .from('machines')
+    .select('id, machine_code, name, line_zone')
+    .order('machine_code', { ascending: true })
 
-  return (
-    <main className="p-8 max-w-5xl mx-auto min-h-screen bg-gray-50 text-gray-800">
-      <header className="mb-8 border-b pb-4">
-        <h1 className="text-3xl font-bold text-slate-800">⚙️ Smart Factory Maintenance Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1">ระบบติดตามสถานะการแจ้งซ่อมและเบิกใช้อะไหล่</p>
-      </header>
-
-      <div className="grid gap-4">
-        {ticketList.map((ticket) => (
-          <TicketCard key={ticket.id} ticket={ticket} />
-        ))}
-      </div>
-    </main>
-  )
+  return <DashboardContent tickets={tickets || []} machines={machines || []} />
 }

@@ -39,3 +39,22 @@ export async function createTicket(formData: FormData) {
   // สั่งเคลียร์แคชและรีเฟรชหน้า Dashboard ให้แสดงข้อมูลใหม่ทันที
   revalidatePath('/')
 }
+
+// เพิ่มฟังก์ชันนี้ต่อท้ายใน src/app/actions.ts
+export async function updateTicketStatus(ticketId: number, newStatus: string) {
+  if (!ticketId || !newStatus) {
+    throw new Error('ข้อมูลไม่ครบถ้วนสำหรับการอัปเดตสถานะ')
+  }
+
+  const { error } = await supabase
+    .from('maintenance_tickets')
+    .update({ status: newStatus })
+    .eq('id', ticketId)
+
+  if (error) {
+    throw new Error(`ไม่สามารถอัปเดตสถานะได้: ${error.message}`)
+  }
+
+  // รีเฟรชหน้าจอให้ข้อมูลอัปเดตแบบเรียลไทม์
+  revalidatePath('/')
+}
