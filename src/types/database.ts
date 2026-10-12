@@ -10,7 +10,7 @@ export interface TicketSparePart {
 }
 
 export interface Machine {
-  id?: number
+  id: number
   machine_code: string
   name: string
   line_zone: string

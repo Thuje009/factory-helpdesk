@@ -19,16 +19,13 @@ export const metadata: Metadata = {
 };
 
 // 2. ปรับ Type ของ props เป็น { children: React.ReactNode } ตามมาตรฐาน Next.js
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="th">
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-gray-50">
+      {/* ใส่ suppressHydrationWarning เพื่อป้องกัน Extension แทรก attr แล้วฟ้อง Error */}
+      <body suppressHydrationWarning>
         {children}
       </body>
     </html>
-  );
+  )
 }
